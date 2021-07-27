@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Container, Typography, Button, Grid} from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import useStyles from './styles';
+import CartItem from './CartItem/CartItem';
 
 const Cart = ({ cart }) => {
     const classes = useStyles();
     
     const EmptyCart = () =>(
-        <Typography variant ="subtitle1">You have no items in your shopping cart. Start adding some!</Typography>);
-    
+        <Typography variant ="subtitle1">You have no items in your shopping cart. 
+            <Link to="/" className={classes.link} > Start adding some</Link> !
+        </Typography>);
 
     const FilledCart = () =>(
 
@@ -15,7 +18,7 @@ const Cart = ({ cart }) => {
             <Grid container spacing={3}>
                 {cart.line_items.map((item)=>(
                     <Grid item xs={12} sm={4} key={item.id}>
-                        <div>{item.name}</div>
+                        <CartItem item={item} />
 
                     </Grid>
 
@@ -47,7 +50,7 @@ const Cart = ({ cart }) => {
     return (
         <Container>
             <div className={classes.toolbar} />
-            <Typography className={classes.title} variant="h3">Your Shopping Cart</Typography>
+            <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
             {!cart.line_items.length ? <EmptyCart />:<FilledCart/> }
 
 
