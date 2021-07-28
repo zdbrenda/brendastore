@@ -6,6 +6,7 @@ import { commerce } from '../../../lib/commerce';
 import useStyles from './styles';
 import AddressForm from '../AddressForm';
 import PaymentForm from '../PaymenForm';
+import Review from '../Review';
 const steps =["Shipping address", "Payment details"];
 
 const Checkout = ( { cart } ) => {
@@ -49,7 +50,7 @@ const Checkout = ( { cart } ) => {
     )
     const Form = ()=> activeStep === 0 ? 
     <AddressForm checkoutToken = {checkoutToken} next={next}/> :
-    <PaymentForm />
+    <PaymentForm shippingData = {shippingData} checkoutToken = {checkoutToken} />
 
 
 
