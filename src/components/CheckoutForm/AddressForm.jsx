@@ -28,11 +28,8 @@ const AddressForm = ({ checkoutToken, next }) => {
   const subdivisions = Object.entries(
     shippingSubdivisions
   ).map(([code, name]) => ({ id: code, label: name }));
-  const options = shippingOptions.map((so) => ({
-    id: so.id,
-    label: `${so.description} - (${so.price.formtted_with_symbol} )`,
-  }));
 
+  
   const fetchShippingCountries = async (checkoutTokenId) => {
     const { countries } = await commerce.services.localeListShippingCountries(
       checkoutTokenId
@@ -54,14 +51,14 @@ const AddressForm = ({ checkoutToken, next }) => {
   const fetchShippingOptions = async (
     checkoutTokenId,
     country,
-    region = null
+    stateProvince = null
   ) => {
     const options = await commerce.checkout.getShippingOptions(
       checkoutTokenId,
-      { country, region }
-    );
+      { country, region: stateProvince });
     setShippingOptions(options);
     setShippingOption(options[0].id);
+   
   };
 
   useEffect(() => {
@@ -89,12 +86,7 @@ const AddressForm = ({ checkoutToken, next }) => {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit((data) =>
-            next({
-              ...data,
-              shippingCountry,
-              shippingSubdivision,
-              shippingOption,
-            })
+            next({...data, shippingCountry, shippingSubdivision, shippingOption })
           )}
         >
           <Grid container spacing={3}>
@@ -137,11 +129,10 @@ const AddressForm = ({ checkoutToken, next }) => {
               <Select
                 value={shippingOption}
                 fullWidth
-                onChange={(e) => setShippingOption(e.target.value)}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.id} value={option.id}>
-                    {option.label}
+                onChange={(e) => setShippingOption(e.target.value)}>
+                {shippingOptions.map((sO)=>({id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})`})).map((item) =>(
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.label}
                   </MenuItem>
                 ))}
               </Select>
